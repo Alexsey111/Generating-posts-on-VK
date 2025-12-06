@@ -1,4 +1,4 @@
-.PHONY: install install-dev test test-cov lint format type-check clean run
+.PHONY: install install-dev install-web test test-cov lint format type-check clean run run-web init-db prod-setup
 
 # Default target
 all: install-dev test lint format type-check
@@ -10,6 +10,9 @@ install:
 install-dev:
 	pip install -r requirements.txt
 	pip install -r requirements-dev.txt
+
+install-web:
+	pip install flask flask-login flask-wtf flask-sqlalchemy werkzeug
 
 # Testing
 test:
@@ -37,6 +40,18 @@ dev-setup: install-dev
 run:
 	python test.py
 
+# Web application commands
+run-web: install-web
+	python app.py
+
+init-db: install-web
+	python init_db.py
+
+prod-setup: install-web
+	@echo "Setting up production environment..."
+	@echo "Please ensure your .env file is properly configured for production"
+	@echo "Run 'cp .env.example .env' and edit the file with production values"
+
 # Cleanup
 clean:
 	find . -type f -name "*.pyc" -delete
@@ -44,9 +59,11 @@ clean:
 	find . -type d -name ".pytest_cache" -delete
 	find . -type d -name "htmlcov" -delete
 	find . -type d -name ".coverage" -delete
+	find . -type d -name "*.egg-info" -delete
 	rm -rf build/
 	rm -rf dist/
-	rm -rf *.egg-info/
+	rm -f app.db
+	rm -f *.log
 
 # Full CI pipeline
 ci: install-dev test-cov lint format type-check

@@ -20,8 +20,7 @@ class PostGenerator:
                     "content": f"Сгенерируй пост для соцсетей с темой {self.topic}, используя тон: {self.tone}"
                 }
             ]
-        )  # ✅ Добавлена закрывающая скобка
-        
+        )        
         return response.choices[0].message.content
 
     def generate_post_image_description(self):
@@ -37,6 +36,5 @@ class PostGenerator:
                     "content": f"Сгенерируй изображение для соцсетей с темой {self.topic}"
                 }
             ]
-        )  # ✅ Добавлена закрывающая скобка
-        
+        )        
         return response.choices[0].message.content
